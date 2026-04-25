@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <title>arXiv Query: cat:cs.AI</title>
+  <id>http://arxiv.org/api/query</id>
+  <updated>2026-04-25T00:00:00Z</updated>
+  <entry>
+    <id>http://arxiv.org/abs/2604.00001v1</id>
+    <updated>2026-04-21T10:00:00Z</updated>
+    <published>2026-04-20T10:00:00Z</published>
+    <title>
+      Practical
+      Tool Use   for Research Agents
+    </title>
+    <summary>
+      A benchmark-driven study of tool-using
+      AI agents for research workflows.
+    </summary>
+    <author>
+      <name>Ada Lovelace</name>
+    </author>
+    <author>
+      <name>Grace Hopper</name>
+    </author>
+    <arxiv:primary_category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <link href="http://arxiv.org/abs/2604.00001v1" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/2604.00001v1" rel="related" type="application/pdf"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2604.00002v2</id>
+    <updated>2026-04-19T10:00:00Z</updated>
+    <published>2026-04-18T10:00:00Z</published>
+    <title>Retrieval Evaluation for Language Models</title>
+    <summary>Evaluation methods for retrieval augmented generation in language models.</summary>
+    <author>
+      <name>Katherine Johnson</name>
+    </author>
+    <arxiv:primary_category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <link href="http://arxiv.org/abs/2604.00002v2" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/2604.00002v2" rel="related" type="application/pdf"/>
+  </entry>
+</feed>

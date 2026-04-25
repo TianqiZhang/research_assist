@@ -87,9 +87,13 @@ Response:
 ```json
 {
   "run_id": "uuid",
-  "status": "queued"
+  "status": "succeeded"
 }
 ```
+
+For the local MVP runner, this endpoint executes the workflow synchronously and returns the
+final run status (`"succeeded"` or `"failed"`) with HTTP 202. When queue-backed execution is
+added, this response can return `"queued"` immediately.
 
 ### `GET /runs/:id`
 
@@ -143,7 +147,7 @@ Email subject:
 
 Add tests for:
 
-- Manual run creates queued/running run.
+- Manual run creates a run, executes it locally, and exposes the final status.
 - Workflow calls steps in order with mocks.
 - Step failure marks run failed and writes event.
 - Email failure keeps digest saved.
@@ -165,4 +169,3 @@ Record:
 - Whether Cloudflare Workflows are implemented directly or behind a local runner abstraction.
 - Queue message shape.
 - Email provider selected.
-

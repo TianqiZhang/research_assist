@@ -1,0 +1,10 @@
+name = "research-assistant"
+main = "src/index.ts"
+compatibility_date = "2026-04-25"
+
+[vars]
+USE_MOCK_PROVIDERS = "true"
+LLM_PROVIDER = "mock"
+EMAIL_PROVIDER = "mock"
+INTERNAL_API_SECRET = "local-dev-secret"
+APP_BASE_URL = "http://localhost:8787"

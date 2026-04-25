@@ -76,16 +76,20 @@ Minimum methods:
 - `assistants.create(input)`
 - `assistants.update(id, input)`
 - `profiles.getLatest(assistantId)`
+- `profiles.getByVersion(assistantId, version)`
 - `profiles.create(input)`
 - `papers.upsertMany(papers)`
 - `papers.searchRecent(input)`
+- `papers.getByIds(arxivIds)`
 - `runs.create(input)`
 - `runs.updateStatus(input)`
 - `runEvents.append(input)`
 - `candidates.insertMany(runId, candidates)`
 - `scores.insertMany(runId, scores)`
 - `digests.create(input)`
+- `digests.getById(id)`
 - `digests.getByRunId(runId)`
+- `digests.updateEmailStatus(input)`
 
 ## Data Rules
 
