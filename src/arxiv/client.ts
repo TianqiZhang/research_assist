@@ -13,7 +13,7 @@ export class HttpArxivClient implements ArxivFeedClient {
 
   constructor(options: HttpArxivClientOptions = {}) {
     this.baseUrl = options.baseUrl ?? "https://export.arxiv.org/api/query";
-    this.fetcher = options.fetcher ?? fetch;
+    this.fetcher = options.fetcher ?? ((input, init) => fetch(input, init));
     this.retries = options.retries ?? 2;
   }
 

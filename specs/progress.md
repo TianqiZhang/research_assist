@@ -225,6 +225,17 @@ Known issues: Manual runs still execute synchronously until queue-backed executi
 Next recommended step: Commit the MVP baseline, then choose the next production hardening slice.
 ```
 
+```text
+Date: 2026-04-26
+Agent: Codex
+Component: Real LLM provider integration
+Files changed: src/llm/azureOpenAiProvider.ts, src/llm/index.ts, src/env.ts, src/http/dependencies.ts, src/arxiv/client.ts, test/llm/azureOpenAiProvider.test.ts, test/http/dependencies.test.ts, test/env.test.ts, .env.example, specs/progress.md
+What changed: Added a fetch-based Azure OpenAI chat-completions provider behind the existing `LlmProvider.generateJson()` interface, added Azure OpenAI environment fields, allowed mixed real Azure LLM plus mock email configuration, kept `USE_MOCK_PROVIDERS=true` as the global provider override, fixed Worker-safe default fetch binding for Azure/arXiv clients, and covered request/response/error/dependency-resolution behavior with focused tests.
+Tests run: npm test; npm run typecheck; git diff --check
+Known issues: Real email delivery is still not implemented. Azure OpenAI uses JSON mode plus existing validators/retries; strict schema outputs can be added later if the deployment/API version supports the required schema behavior.
+Next recommended step: Fill Azure OpenAI values in `.dev.vars`, run a live assistant/profile smoke, then test a full run after refreshing the arXiv cache.
+```
+
 ## Handoff Template
 
 ```text

@@ -1,4 +1,5 @@
 import { MockLlmProvider } from "../llm/mockProvider";
+import { AzureOpenAiLlmProvider } from "../llm/azureOpenAiProvider";
 import type { LlmProvider } from "../llm/provider";
 import { MockEmailProvider } from "../email/provider";
 import {
@@ -52,7 +53,24 @@ export function resolveLlmProvider(
     return new MockLlmProvider();
   }
 
+  if (config.llmProvider === "azure-openai") {
+    return new AzureOpenAiLlmProvider({
+      endpoint: required(config.azureOpenAiEndpoint, "AZURE_OPENAI_ENDPOINT"),
+      apiKey: required(config.azureOpenAiApiKey, "AZURE_OPENAI_API_KEY"),
+      deployment: required(config.azureOpenAiDeployment, "AZURE_OPENAI_DEPLOYMENT"),
+      apiVersion: required(config.azureOpenAiApiVersion, "AZURE_OPENAI_API_VERSION")
+    });
+  }
+
   throw new Error("Real LLM provider is not implemented yet");
+}
+
+function required(value: string | undefined, name: string): string {
+  if (!value) {
+    throw new Error(`${name} is required`);
+  }
+
+  return value;
 }
 
 export function resolveEmailProvider(

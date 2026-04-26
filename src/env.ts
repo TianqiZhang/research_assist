@@ -3,6 +3,10 @@ export interface WorkerBindings {
   SUPABASE_SERVICE_ROLE_KEY?: string;
   LLM_PROVIDER?: string;
   LLM_API_KEY?: string;
+  AZURE_OPENAI_ENDPOINT?: string;
+  AZURE_OPENAI_API_KEY?: string;
+  AZURE_OPENAI_DEPLOYMENT?: string;
+  AZURE_OPENAI_API_VERSION?: string;
   EMAIL_PROVIDER?: string;
   EMAIL_API_KEY?: string;
   INTERNAL_API_SECRET?: string;
@@ -16,6 +20,10 @@ export interface AppConfig {
   supabaseServiceRoleKey?: string;
   llmProvider: string;
   llmApiKey?: string;
+  azureOpenAiEndpoint?: string;
+  azureOpenAiApiKey?: string;
+  azureOpenAiDeployment?: string;
+  azureOpenAiApiVersion?: string;
   emailProvider: string;
   emailApiKey?: string;
   internalApiSecret: string;
@@ -42,9 +50,7 @@ const REQUIRED_CORE_KEYS = [
 
 const REQUIRED_REAL_PROVIDER_KEYS = [
   "SUPABASE_URL",
-  "SUPABASE_SERVICE_ROLE_KEY",
-  "LLM_API_KEY",
-  "EMAIL_API_KEY"
+  "SUPABASE_SERVICE_ROLE_KEY"
 ] as const;
 
 export function validateEnv(env: Partial<WorkerBindings> = {}): AppConfig {
@@ -60,8 +66,23 @@ export function validateEnv(env: Partial<WorkerBindings> = {}): AppConfig {
     }
   }
 
+  const llmProvider = env.LLM_PROVIDER?.trim() ?? "";
+  const emailProvider = env.EMAIL_PROVIDER?.trim() ?? "";
+
+  if (!useMockProviders) {
+    validateLlmProvider(env, llmProvider, issues);
+    validateEmailProvider(env, emailProvider, issues);
+  }
+
   if (hasValue(env.SUPABASE_URL) && !isValidUrl(env.SUPABASE_URL)) {
     issues.push("SUPABASE_URL must be a valid URL");
+  }
+
+  if (
+    hasValue(env.AZURE_OPENAI_ENDPOINT) &&
+    !isValidUrl(env.AZURE_OPENAI_ENDPOINT)
+  ) {
+    issues.push("AZURE_OPENAI_ENDPOINT must be a valid URL");
   }
 
   if (hasValue(env.APP_BASE_URL) && !isValidUrl(env.APP_BASE_URL)) {
@@ -75,14 +96,60 @@ export function validateEnv(env: Partial<WorkerBindings> = {}): AppConfig {
   return {
     supabaseUrl: normalizeOptional(env.SUPABASE_URL),
     supabaseServiceRoleKey: normalizeOptional(env.SUPABASE_SERVICE_ROLE_KEY),
-    llmProvider: env.LLM_PROVIDER?.trim() ?? "",
+    llmProvider,
     llmApiKey: normalizeOptional(env.LLM_API_KEY),
-    emailProvider: env.EMAIL_PROVIDER?.trim() ?? "",
+    azureOpenAiEndpoint: normalizeOptional(env.AZURE_OPENAI_ENDPOINT),
+    azureOpenAiApiKey: normalizeOptional(env.AZURE_OPENAI_API_KEY),
+    azureOpenAiDeployment: normalizeOptional(env.AZURE_OPENAI_DEPLOYMENT),
+    azureOpenAiApiVersion: normalizeOptional(env.AZURE_OPENAI_API_VERSION),
+    emailProvider,
     emailApiKey: normalizeOptional(env.EMAIL_API_KEY),
     internalApiSecret: env.INTERNAL_API_SECRET?.trim() ?? "",
     appBaseUrl: env.APP_BASE_URL?.trim() ?? "",
     useMockProviders
   };
+}
+
+function validateLlmProvider(
+  env: Partial<WorkerBindings>,
+  llmProvider: string,
+  issues: string[]
+): void {
+  if (!hasValue(llmProvider) || llmProvider === "mock") {
+    return;
+  }
+
+  if (llmProvider === "azure-openai") {
+    for (const key of [
+      "AZURE_OPENAI_ENDPOINT",
+      "AZURE_OPENAI_API_KEY",
+      "AZURE_OPENAI_DEPLOYMENT",
+      "AZURE_OPENAI_API_VERSION"
+    ] as const) {
+      if (!hasValue(env[key])) {
+        issues.push(`${key} is required`);
+      }
+    }
+    return;
+  }
+
+  if (!hasValue(env.LLM_API_KEY)) {
+    issues.push("LLM_API_KEY is required");
+  }
+}
+
+function validateEmailProvider(
+  env: Partial<WorkerBindings>,
+  emailProvider: string,
+  issues: string[]
+): void {
+  if (!hasValue(emailProvider) || emailProvider === "mock") {
+    return;
+  }
+
+  if (!hasValue(env.EMAIL_API_KEY)) {
+    issues.push("EMAIL_API_KEY is required");
+  }
 }
 
 function shouldUseMockProviders(
